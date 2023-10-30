@@ -72,7 +72,7 @@ public class UserControllerTest {
             .birthday(LocalDate.of(1990, 12, 12))
             .build();
 
-        Throwable throwable = Assertions.assertThrows(ValidationException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(ValidationException.class, () -> {
             controller.createUser(user);
         });
 
@@ -91,7 +91,7 @@ public class UserControllerTest {
 
         controller.createUser(user);
 
-        Throwable throwable = Assertions.assertThrows(UserAlreadyExistException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(UserAlreadyExistException.class, () -> {
             controller.createUser(user);
         });
 
@@ -108,7 +108,7 @@ public class UserControllerTest {
             .birthday(LocalDate.of(1990, 12, 12))
             .build();
 
-        Throwable throwable = Assertions.assertThrows(ValidationException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(ValidationException.class, () -> {
             controller.createUser(user);
         });
 

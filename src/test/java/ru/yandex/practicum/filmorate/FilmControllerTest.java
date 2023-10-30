@@ -45,7 +45,7 @@ public class FilmControllerTest {
 
         controller.createFilm(film);
 
-        Throwable throwable = Assertions.assertThrows(FilmNameAlreadyExistException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(FilmNameAlreadyExistException.class, () -> {
             controller.createFilm(film);
         });
 
@@ -62,7 +62,7 @@ public class FilmControllerTest {
             .releaseDate(LocalDate.of(1990, 12, 12))
             .build();
 
-        Throwable throwable = Assertions.assertThrows(InvalidFilmNameException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(InvalidFilmNameException.class, () -> {
             controller.createFilm(film);
         });
 
@@ -81,7 +81,7 @@ public class FilmControllerTest {
             .releaseDate(LocalDate.of(1990, 12, 12))
             .build();
 
-        Throwable throwable = Assertions.assertThrows(ValidationException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(ValidationException.class, () -> {
             controller.createFilm(film);
         });
 
@@ -98,7 +98,7 @@ public class FilmControllerTest {
             .releaseDate(LocalDate.of(1990, 12, 12))
             .build();
 
-        Throwable throwable = Assertions.assertThrows(ValidationException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(ValidationException.class, () -> {
             controller.createFilm(film);
         });
 
@@ -115,7 +115,7 @@ public class FilmControllerTest {
             .releaseDate(LocalDate.of(1895, 12, 27))
             .build();
 
-        Throwable throwable = Assertions.assertThrows(ValidationException.class, ()->{
+        Throwable throwable = Assertions.assertThrows(ValidationException.class, () -> {
             controller.createFilm(film);
         });
 
