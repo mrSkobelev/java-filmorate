@@ -42,6 +42,10 @@ public class UserController {
 
         user.setId(generateId());
 
+        if (user.getName() == null) {
+            user.setName(user.getLogin());
+        }
+
         log.info("Добавлен пользователь {}", user.getEmail());
 
         users.put(user.getId(), user);
