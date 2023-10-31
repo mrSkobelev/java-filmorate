@@ -21,7 +21,8 @@ import ru.yandex.practicum.filmorate.model.Film;
 @RequestMapping("/films")
 public class FilmController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    private Map<String, Film> films = new HashMap<>();
+    private Map<Long, Film> films = new HashMap<>();
+    private long generatorId = 1;
 
     @GetMapping
     public Collection<Film> getAllFilms() {
@@ -34,14 +35,17 @@ public class FilmController {
     public Film createFilm(@RequestBody Film film) {
         validFilm(film);
 
-        if (films.containsKey(film.getName())) {
-            throw new FilmNameAlreadyExistException("Фильм с названием " + film.getName()
+        if (films.containsKey(film.getId())) {
+            log.info("Попытка создать фильм с существующим id");
+            throw new FilmNameAlreadyExistException("Фильм с id " + film.getId()
                 + " уже существует.");
         }
 
+        film.setId(generateId());
+
         log.info("Добавлен фильм {}", film.getName());
 
-        films.put(film.getName(), film);
+        films.put(film.getId(), film);
         return film;
     }
 
@@ -49,9 +53,14 @@ public class FilmController {
     public Film updateFilm(@RequestBody Film film) {
         validFilm(film);
 
+        if (!(films.containsKey(film.getId()))) {
+            log.info("Не найден фильм при попытке обновления");
+            throw new ValidationException("Не найден фильм с id " + film.getId());
+        }
+
         log.info("Обновлён фильм {}", film.getName());
 
-        films.put(film.getName(), film);
+        films.put(film.getId(), film);
 
         return film;
     }
@@ -78,5 +87,9 @@ public class FilmController {
             log.info("Отрицательная продолжительность фильма.");
             throw new ValidationException("Продолжительность фильма должна быть положительной.");
         }
+    }
+
+    private long generateId() {
+        return generatorId++;
     }
 }

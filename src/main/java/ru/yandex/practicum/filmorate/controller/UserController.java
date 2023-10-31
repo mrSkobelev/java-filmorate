@@ -21,7 +21,8 @@ import ru.yandex.practicum.filmorate.model.User;
 @RequestMapping("/users")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    private Map<String, User> users = new HashMap<>();
+    private Map<Long, User> users = new HashMap<>();
+    private long generatorId = 1;
 
     @GetMapping
     public Collection<User> getAllUsers() {
@@ -34,14 +35,16 @@ public class UserController {
     public User createUser(@Valid @RequestBody User user) {
         validUser(user);
 
-        if (users.containsKey(user.getEmail())) {
-            throw new UserAlreadyExistException("Пользователь с электронной почтой "
-                + user.getEmail() + " уже зарегистрирован.");
+        if (users.containsKey(user.getId())) {
+            throw new UserAlreadyExistException("Пользователь с id "
+                + user.getId() + " уже зарегистрирован.");
         }
+
+        user.setId(generateId());
 
         log.info("Добавлен пользователь {}", user.getEmail());
 
-        users.put(user.getEmail(), user);
+        users.put(user.getId(), user);
         return user;
     }
 
@@ -49,9 +52,14 @@ public class UserController {
     public User updateUser(@Valid @RequestBody User user) {
         validUser(user);
 
+        if (!(users.containsKey(user.getId()))) {
+            log.info("Не найден пользователь при попытке обновления");
+            throw new ValidationException("Не найден пользователь с id " + user.getId());
+        }
+
         log.info("Обновлён пользователь {}", user.getEmail());
 
-        users.put(user.getEmail(), user);
+        users.put(user.getId(), user);
 
         return user;
     }
@@ -80,5 +88,9 @@ public class UserController {
             log.info("Дата рождения пользователя в будущем.");
             throw new ValidationException("Нельзя использовать дату рождения в будущем.");
         }
+    }
+
+    private long generateId() {
+        return generatorId++;
     }
 }

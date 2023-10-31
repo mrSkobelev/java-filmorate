@@ -11,7 +11,7 @@ import lombok.Data;
 @Builder
 public class User {
     @NotNull
-    private int id;
+    private long id;
     @Email
     @NotBlank
     private String email;

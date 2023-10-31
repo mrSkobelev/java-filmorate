@@ -10,7 +10,7 @@ import lombok.Data;
 @Builder
 public class Film {
     @NotNull
-    private int id;
+    private long id;
     @NotNull
     @NotBlank
     private String name;
