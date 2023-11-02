@@ -1,11 +1,11 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,18 +17,18 @@ import ru.yandex.practicum.filmorate.exception.InvalidFilmNameException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+@Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private Map<Long, Film> films = new HashMap<>();
     private long generatorId = 1;
 
     @GetMapping
-    public Collection<Film> getAllFilms() {
+    public List<Film> getAllFilms() {
         log.info("Текущее количество фильмов: {}", films.size());
 
-        return films.values();
+        return new ArrayList<>(films.values());
     }
 
     @PostMapping
