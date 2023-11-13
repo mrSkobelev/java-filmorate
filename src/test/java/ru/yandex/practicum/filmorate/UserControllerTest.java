@@ -8,13 +8,20 @@ import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.exception.UserAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 public class UserControllerTest {
+    UserStorage storage;
+    UserService service;
     UserController controller;
 
     @BeforeEach
     public void setUp() {
-        controller = new UserController();
+        storage = new InMemoryUserStorage();
+        service = new UserService(storage);
+        controller = new UserController(service, storage);
     }
 
     @Test
