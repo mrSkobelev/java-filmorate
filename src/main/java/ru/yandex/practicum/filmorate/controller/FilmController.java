@@ -22,39 +22,36 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
     private final FilmService service;
-    private final FilmStorage storage;
 
     @Autowired
-    public FilmController(FilmService service, FilmStorage storage) {
+    public FilmController(FilmService service) {
         this.service = service;
-        this.storage = storage;
     }
 
     @GetMapping("/{id}")
     public Film getFilmById(@PathVariable long id) {
-        return storage.getFilmById(id);
+        return service.getFilmById(id);
     }
 
     @GetMapping
     public List<Film> getAllFilms() {
-        return storage.getAllFilms();
+        return service.getAllFilms();
     }
 
     @PostMapping
     public Film createFilm(@RequestBody Film film) {
-        return storage.createFilm(film);
+        return service.createFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
-        return storage.updateFilm(film);
+        return service.updateFilm(film);
     }
 
     @PutMapping("/{id}/like/{userId}")
@@ -67,13 +64,9 @@ public class FilmController {
         service.removeLike(id, userId);
     }
 
-    @GetMapping("/popular?count={count}")
-    public List<Film> getTop10Films(@RequestParam(required = false) final Integer count) {
-        if (count == null || count <= 0) {
-            return service.getTop10Films(10);
-        } else {
+    @GetMapping("/popular")
+    public List<Film> getTop10Films(@RequestParam(value = "count", defaultValue = "10", required = false) final Integer count) {
             return service.getTop10Films(count);
-        }
     }
 
     @ExceptionHandler

@@ -21,40 +21,36 @@ import ru.yandex.practicum.filmorate.exception.UserAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
-
 
 @RestController
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
     private final UserService service;
-    private final UserStorage storage;
 
     @Autowired
-    public UserController(UserService service, UserStorage storage) {
+    public UserController(UserService service) {
         this.service = service;
-        this.storage = storage;
     }
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable long id) {
-        return storage.getUserById(id);
+        return service.getUserById(id);
     }
 
     @GetMapping
     public List<User> getAllUsers() {
-        return storage.getAllUsers();
+        return service.getAllUsers();
     }
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-        return storage.createUser(user);
+        return service.createUser(user);
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User user) {
-        return storage.updateUser(user);
+        return service.updateUser(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
@@ -68,8 +64,13 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public void commonFriends(@PathVariable long id, @PathVariable long otherId) {
-        service.commonFriends(id, otherId);
+    public List<User> commonFriends(@PathVariable long id, @PathVariable long otherId) {
+        return service.commonFriends(id, otherId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getUserFriends(@PathVariable long id) {
+        return service.getUserFriends(id);
     }
 
     @ExceptionHandler

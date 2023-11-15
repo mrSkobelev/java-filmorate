@@ -2,11 +2,9 @@ package ru.yandex.practicum.filmorate.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -20,57 +18,68 @@ public class UserService {
         this.storage = storage;
     }
 
+    public User getUserById(long id) {
+        return storage.getUserById(id);
+    }
+
+    public List<User> getAllUsers() {
+        return storage.getAllUsers();
+    }
+
+    public User createUser(User user) {
+        return storage.createUser(user);
+    }
+
+    public User updateUser(User user) {
+        return storage.updateUser(user);
+    }
+
     public void addFriend(long userId, long friendId) {
-        User user = storage.getUserById(userId);
-        User friend = storage.getUserById(friendId);
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
 
-        Set<Long> usersFriends = user.getFriendsId();
-        usersFriends.add(friendId);
-        user.setFriendsId(usersFriends);
+        user.getFriendsId().add(friendId);
+        friend.getFriendsId().add(userId);
 
-        Set<Long> friendFriends = friend.getFriendsId();
-        friendFriends.add(userId);
-        friend.setFriendsId(friendFriends);
-
-        storage.updateUser(user);
-        storage.updateUser(friend);
+        updateUser(user);
+        updateUser(friend);
 
         log.info("пользователи с id " + userId + " и " + friendId + " добавились в друзья");
+    }
+
+    public List<User> getUserFriends(long userId) {
+        List<User> userFriends = new ArrayList<>();
+        User user = getUserById(userId);
+
+        for (Long friendId : user.getFriendsId()) {
+            userFriends.add(getUserById(friendId));
+        }
+
+        return userFriends;
     }
 
     public void removeFriend(long userId, long friendId) {
-        User user = storage.getUserById(userId);
-        User friend = storage.getUserById(friendId);
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
 
-        Set<Long> usersFriends = user.getFriendsId();
+        user.getFriendsId().remove(friendId);
+        friend.getFriendsId().remove(userId);
 
-        if (!usersFriends.contains(friendId)) {
-            throw new NotFoundException("Не найден пользователь с id: " + friendId +
-                " в списке друзей");
-        }
-
-        usersFriends.remove(friendId);
-        user.setFriendsId(usersFriends);
-
-        Set<Long> friendFriends = friend.getFriendsId();
-        friendFriends.remove(userId);
-        friend.setFriendsId(friendFriends);
-
-        storage.updateUser(user);
-        storage.updateUser(friend);
+        updateUser(user);
+        updateUser(friend);
 
         log.info("пользователи с id " + userId + " и " + friendId + " добавились в друзья");
     }
 
-    public List<Long> commonFriends(long userId, long friendId) {
-        List<Long> commonFriends = new ArrayList<>();
+    public List<User> commonFriends(long userId, long friendId) {
+        List<User> commonFriends = new ArrayList<>();
 
-        User user = storage.getUserById(userId);
-        User friend = storage.getUserById(friendId);
+        User user = getUserById(userId);
+        User friend = getUserById(friendId);
 
         for (Long id : user.getFriendsId()) {
             if (friend.getFriendsId().contains(id)) {
-                commonFriends.add(id);
+                commonFriends.add(getUserById(id));
             }
         }
 

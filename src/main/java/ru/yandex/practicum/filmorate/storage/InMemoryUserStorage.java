@@ -15,7 +15,7 @@ import ru.yandex.practicum.filmorate.model.User;
 @Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
-    private Map<Long, User> users = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>();
     private long generatorId = 1;
 
     @Override
@@ -45,7 +45,7 @@ public class InMemoryUserStorage implements UserStorage {
 
         user.setId(generateId());
 
-        if (user.getName() == null) {
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
 

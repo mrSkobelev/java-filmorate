@@ -1,13 +1,11 @@
 package ru.yandex.practicum.filmorate.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -21,39 +19,47 @@ public class FilmService {
         this.storage = storage;
     }
 
+    public Film getFilmById(long filmId) {
+        return storage.getFilmById(filmId);
+    }
+
+    public List<Film> getAllFilms() {
+        return storage.getAllFilms();
+    }
+
+    public Film createFilm(Film film) {
+        return storage.createFilm(film);
+    }
+
+    public Film updateFilm(Film film) {
+        return storage.updateFilm(film);
+    }
+
     public void addLike(long filmId, long userId) {
         Film film = storage.getFilmById(filmId);
 
-        Set<Long> filmLikes = film.getLikes();
-        filmLikes.add(userId);
-        film.setLikes(filmLikes);
+        film.getLikes().add(userId);
 
-        storage.updateFilm(film);
+        updateFilm(film);
         log.info("Лайк успешно добавлен для фильма с id: " + filmId);
     }
 
     public void removeLike(long filmId, long userId) {
-        Film film = storage.getFilmById(filmId);
+        Film film = getFilmById(filmId);
 
-        Set<Long> filmLikes = film.getLikes();
-        if (filmLikes.contains(userId)) {
-            filmLikes.remove(userId);
+        if (!film.getLikes().contains(userId)) {
+            throw new NotFoundException("Не найден лайк от пользователя с id: " + userId);
         }
 
-        storage.updateFilm(film);
-        log.info("Лайк успешно добавлен для фильма с id: " + filmId);
+        film.getLikes().remove(userId);
+        updateFilm(film);
+        log.info("Лайк успешно удален для фильма с id: " + filmId);
     }
 
     public List<Film> getTop10Films(int count) {
-        List<Film> top10 = new ArrayList<>();
-
-        storage.getAllFilms().stream()
-            .sorted(Comparator.comparing(film -> film.getLikes().size()))
+        return getAllFilms().stream()
+            .sorted((f1, f2) -> f2.getLikes().size() - f1.getLikes().size())
             .limit(count)
-            .sorted(Collections.reverseOrder())
-            .map(film -> top10.add(film));
-
-        return top10;
+            .collect(Collectors.toList());
     }
-
 }

@@ -22,7 +22,7 @@ public class FilmControllerTest {
     public void setUp() {
         storage = new InMemoryFilmStorage();
         service = new FilmService(storage);
-        controller = new FilmController(service, storage);
+        controller = new FilmController(service);
     }
 
     @Test
