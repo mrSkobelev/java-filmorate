@@ -16,8 +16,8 @@ import ru.yandex.practicum.filmorate.model.Film;
 @Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
-    private final int DESCRIPTION_LENGTH = 200;
-    private final LocalDate VALIDATION_DATE = LocalDate.of(1895, 12, 28);
+    private final int descriptionLength = 200;
+    private final LocalDate validationDate = LocalDate.of(1895, 12, 28);
 
     private final Map<Long, Film> films = new HashMap<>();
     private long generatorId = 1;
@@ -77,12 +77,12 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
 
         String descriptionChars = film.getDescription();
-        if (descriptionChars.length() > DESCRIPTION_LENGTH) {
+        if (descriptionChars.length() > descriptionLength) {
             log.info("Длинное описание фильма.");
             throw new ValidationException("Количество символов в описании должно быть не больше 200");
         }
 
-        if (film.getReleaseDate().isBefore(VALIDATION_DATE)) {
+        if (film.getReleaseDate().isBefore(validationDate)) {
             log.info("Слишком ранняя дата релиза.");
             throw new ValidationException("Дата релиза должна быть не раньше 28 декабря 1895");
         }
