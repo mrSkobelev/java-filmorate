@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -23,7 +23,7 @@ public class InMemoryUserStorage implements UserStorage {
         if (users.containsKey(id)) {
             return users.get(id);
         } else {
-            throw new NotFoundException("Не найден пользователь с id: " + id);
+            throw new DataNotFoundException("Не найден пользователь с id: " + id);
         }
     }
 
@@ -61,7 +61,7 @@ public class InMemoryUserStorage implements UserStorage {
 
         if (!(users.containsKey(user.getId()))) {
             log.info("Не найден пользователь при попытке обновления");
-            throw new NotFoundException("Не найден пользователь с id " + user.getId());
+            throw new DataNotFoundException("Не найден пользователь с id " + user.getId());
         }
 
         log.info("Обновлён пользователь {}", user.getEmail());

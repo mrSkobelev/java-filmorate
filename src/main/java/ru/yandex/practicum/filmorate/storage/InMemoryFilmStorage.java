@@ -9,13 +9,16 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.FilmNameAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.InvalidFilmNameException;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 @Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
+    private final int DESCRIPTION_LENGTH = 200;
+    private final LocalDate VALIDATION_DATE = LocalDate.of(1895, 12, 28);
+
     private final Map<Long, Film> films = new HashMap<>();
     private long generatorId = 1;
 
@@ -23,9 +26,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film getFilmById(long filmId) {
         if (films.containsKey(filmId)) {
             return films.get(filmId);
-        } else {
-            throw new NotFoundException("Не найден фильм с id: " + filmId);
         }
+        throw new DataNotFoundException("Не найден фильм с id: " + filmId);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
         if (!(films.containsKey(film.getId()))) {
             log.info("Не найден фильм при попытке обновления");
-            throw new NotFoundException("Не найден фильм с id " + film.getId());
+            throw new DataNotFoundException("Не найден фильм с id " + film.getId());
         }
 
         log.info("Обновлён фильм {}", film.getName());
@@ -74,14 +76,13 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new InvalidFilmNameException("Название фильма не может быть пустым.");
         }
 
-        char[] descriptionChars = film.getDescription().toCharArray();
-        if (descriptionChars.length > 200) {
+        String descriptionChars = film.getDescription();
+        if (descriptionChars.length() > DESCRIPTION_LENGTH) {
             log.info("Длинное описание фильма.");
             throw new ValidationException("Количество символов в описании должно быть не больше 200");
         }
 
-        LocalDate validationDate = LocalDate.of(1895, 12, 28);
-        if (film.getReleaseDate().isBefore(validationDate)) {
+        if (film.getReleaseDate().isBefore(VALIDATION_DATE)) {
             log.info("Слишком ранняя дата релиза.");
             throw new ValidationException("Дата релиза должна быть не раньше 28 декабря 1895");
         }

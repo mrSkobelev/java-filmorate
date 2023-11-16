@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -48,7 +48,7 @@ public class FilmService {
         Film film = getFilmById(filmId);
 
         if (!film.getLikes().contains(userId)) {
-            throw new NotFoundException("Не найден лайк от пользователя с id: " + userId);
+            throw new DataNotFoundException("Не найден лайк от пользователя с id: " + userId);
         }
 
         film.getLikes().remove(userId);
