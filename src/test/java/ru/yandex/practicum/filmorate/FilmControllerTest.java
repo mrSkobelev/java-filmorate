@@ -9,13 +9,20 @@ import ru.yandex.practicum.filmorate.exception.FilmNameAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.InvalidFilmNameException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 public class FilmControllerTest {
+    FilmService service;
+    FilmStorage storage;
     FilmController controller;
 
     @BeforeEach
     public void setUp() {
-        controller = new FilmController();
+        storage = new InMemoryFilmStorage();
+        service = new FilmService(storage);
+        controller = new FilmController(service);
     }
 
     @Test
