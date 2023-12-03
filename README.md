@@ -56,6 +56,6 @@ join likes l on f.film_id = l.film_id
 join users u on l.user_id = u.user_id 
 where u.user_id = 1
 group by g.genre_name
-order by COUNT(g.genre_name)
+order by COUNT(g.genre_name) desc
 limit 1;
 ````
