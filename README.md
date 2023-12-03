@@ -1,4 +1,4 @@
-![ALT-image](https://github.com/mrSkobelev/java-filmorate/blob/update_readme/schema.png)
+![ALT-image](https://github.com/mrSkobelev/java-filmorate/blob/main/schema.png)
 
 
 # Примеры запросов к БД 
