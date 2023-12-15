@@ -33,6 +33,7 @@ public class GenreDbStorage {
         }
 
     }
+
     public List<Genre> getAllGenres() {
         String sql = "SELECT * FROM genres";
         return jdbcTemplate.query(sql, getGenreMapper());
