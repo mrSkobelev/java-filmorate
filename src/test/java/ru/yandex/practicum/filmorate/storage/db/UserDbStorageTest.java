@@ -82,6 +82,7 @@ public class UserDbStorageTest {
         User user = userDbStorage.createUser(user1);
 
         user.setLogin("NewSecondLogin");
+        userDbStorage.updateUser(user);
 
         Assertions.assertThat(userDbStorage.getUserById(user.getId()).getLogin())
             .isEqualTo("NewSecondLogin");
