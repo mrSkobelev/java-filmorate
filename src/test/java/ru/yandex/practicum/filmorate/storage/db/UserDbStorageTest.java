@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storageTest;
+package ru.yandex.practicum.filmorate.storage.db;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
