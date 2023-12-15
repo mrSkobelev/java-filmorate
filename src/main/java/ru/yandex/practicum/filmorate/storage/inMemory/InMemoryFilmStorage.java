@@ -20,7 +20,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     private static final LocalDate VALIDATION_DATE = LocalDate.of(1895, 12, 28);
 
     private final Map<Long, Film> films = new HashMap<>();
-    private long generatorId = 1;
 
     @Override
     public Film getFilmById(int filmId) {
