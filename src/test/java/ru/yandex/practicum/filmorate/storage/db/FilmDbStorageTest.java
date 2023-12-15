@@ -13,9 +13,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.storage.db.FilmDbStorage;
-import ru.yandex.practicum.filmorate.storage.db.GenreDbStorage;
-import ru.yandex.practicum.filmorate.storage.db.UserDbStorage;
 
 @JdbcTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
