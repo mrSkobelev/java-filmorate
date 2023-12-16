@@ -104,7 +104,7 @@ public class UserDbStorage implements UserStorage {
                 + "при попытке добавления в друзья");
         }
 
-        String sql = "INSERT INTO friends VALUES(?, ?)";
+        String sql = "INSERT INTO friends (user_1, user_2) VALUES(?, ?)";
         jdbcTemplate.update(sql, userId, friendId);
         log.info("Пользователь с id = {} добавил пользователя с id = {} в друзья", userId, friendId);
     }
