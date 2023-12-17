@@ -15,7 +15,7 @@ import ru.yandex.practicum.filmorate.storage.db.MpaDbStorage;
 @AllArgsConstructor
 @RequestMapping("/mpa")
 public class MpaController {
-    MpaDbStorage mpaDbStorage;
+    private final MpaDbStorage mpaDbStorage;
 
     @GetMapping("/{id}")
     public Mpa getMpaById(@PathVariable int id) {

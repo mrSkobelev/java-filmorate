@@ -13,11 +13,11 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 @Component
 @AllArgsConstructor
 public class MpaDbStorage {
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public Mpa getMpaById(int id) {
         try {
-            String sql = "SELECT * FROM rating WHERE rating_id = ?";
+            String sql = "SELECT rating_id, rating_name FROM rating WHERE rating_id = ?";
             Mpa mpa = jdbcTemplate.queryForObject(sql, getMpaMapper(), id);
             log.info("Получен из БД рейтинг с id = {}", id);
             return mpa;
@@ -28,7 +28,7 @@ public class MpaDbStorage {
     }
 
     public List<Mpa> getAllMpa() {
-        String sql = "SELECT * FROM rating";
+        String sql = "SELECT rating_id, rating_name FROM rating";
         return jdbcTemplate.query(sql, getMpaMapper());
     }
 

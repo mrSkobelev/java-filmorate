@@ -32,7 +32,17 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film getFilmById(int filmId) {
         try {
-            String sql = "SELECT * FROM films AS f JOIN rating AS r ON f.rating_id = r.rating_id WHERE film_id = ?";
+            String sql = "SELECT "
+                + "f.film_id,"
+                + "f.film_name,"
+                + "f.description,"
+                + "f.release_date,"
+                + "f.duration, "
+                + "r.rating_id,"
+                + "r.rating_name "
+                + "FROM films AS f "
+                + "JOIN rating AS r ON f.rating_id = r.rating_id "
+                + "WHERE f.film_id = ?";
             Film film = jdbcTemplate.queryForObject(sql, getFilmMapper(), filmId);
             log.info("Получен фильм из БД с id = {}", filmId);
             return film;
@@ -44,7 +54,17 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getAllFilms() {
-        String sql = "SELECT * FROM films AS f JOIN rating AS r ON f.rating_id = r.rating_id ORDER BY film_id;";
+        String sql = "SELECT "
+            + "f.film_id, "
+            + "f.film_name, "
+            + "f.description, "
+            + "f.release_date, "
+            + "f.duration, "
+            + "r.rating_id, "
+            + "r.rating_name "
+            + "FROM films AS f "
+            + "JOIN rating AS r ON f.rating_id = r.rating_id "
+            + "ORDER BY f.film_id";
         return jdbcTemplate.query(sql, getFilmMapper());
     }
 
@@ -135,7 +155,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getTop10Films(int count) {
+    public List<Film> getTopFilms(int count) {
         String sql = "SELECT count(user_id) AS count, f.*, r.rating_name "
             + "FROM likes l "
             + "RIGHT JOIN films f ON f.film_id = l.film_id  "

@@ -80,7 +80,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getTop10Films(int count) {
+    public List<Film> getTopFilms(int count) {
         return null;
     }
 

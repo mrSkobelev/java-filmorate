@@ -24,7 +24,14 @@ public class UserDbStorage implements UserStorage {
     @Override
     public User getUserById(Integer id) {
         try {
-            String sql = "SELECT * FROM users WHERE user_id = ?";
+            String sql = "SELECT "
+                + "user_id, "
+                + "email, "
+                + "login, "
+                + "user_name, "
+                + "birthday "
+                + "FROM users "
+                + "WHERE user_id = ?";
             User user = jdbcTemplate.queryForObject(sql, getUserMapper(), id);
             log.info("Получен из БД пользователь с id = {}", id);
             return user;
@@ -47,7 +54,14 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getAllUsers() {
-        return jdbcTemplate.query("SELECT * FROM users;", getUserMapper());
+        String sql = "SELECT "
+            + "user_id, "
+            + "email, "
+            + "login, "
+            + "user_name, "
+            + "birthday "
+            + "FROM users";
+        return jdbcTemplate.query(sql, getUserMapper());
     }
 
     @Override
@@ -111,7 +125,14 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getUserFriends(int userId) {
-        String sql = "SELECT * FROM users WHERE user_id IN "
+        String sql = "SELECT "
+            + "user_id, "
+            + "email, "
+            + "login, "
+            + "user_name, "
+            + "birthday "
+            + "FROM users "
+            + "WHERE user_id IN "
             + "(SELECT user_2 FROM friends WHERE user_1 = ?)";
         return jdbcTemplate.query(sql, getUserMapper(), userId);
     }

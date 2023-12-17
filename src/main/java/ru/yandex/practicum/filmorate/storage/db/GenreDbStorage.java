@@ -19,11 +19,11 @@ import ru.yandex.practicum.filmorate.model.Genre;
 @Component
 @AllArgsConstructor
 public class GenreDbStorage {
-    JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public Genre getGenreById(int genreId) {
         try {
-            String sql = "SELECT * FROM genres WHERE genre_id = ?";
+            String sql = "SELECT genre_id, genre_name FROM genres WHERE genre_id = ?";
             Genre genre = jdbcTemplate.queryForObject(sql, getGenreMapper(), genreId);
             log.info("Получен из БД жанр с id = {}", genreId);
             return genre;
@@ -35,12 +35,12 @@ public class GenreDbStorage {
     }
 
     public List<Genre> getAllGenres() {
-        String sql = "SELECT * FROM genres";
+        String sql = "SELECT genre_id, genre_name FROM genres";
         return jdbcTemplate.query(sql, getGenreMapper());
     }
 
     public List<Genre> getFilmGenres(int filmId) {
-        String sql = "SELECT * FROM genres WHERE genre_id IN "
+        String sql = "SELECT genre_id, genre_name FROM genres WHERE genre_id IN "
             + "(SELECT genre_id FROM film_genre WHERE film_id = ?) ORDER BY genre_id";
 
         return jdbcTemplate.query(sql, getGenreMapper(), filmId);
