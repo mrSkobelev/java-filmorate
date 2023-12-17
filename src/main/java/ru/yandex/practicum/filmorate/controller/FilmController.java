@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,17 +18,13 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 @Slf4j
 @RestController
+@AllArgsConstructor
 @RequestMapping("/films")
 public class FilmController {
     private final FilmService service;
 
-    @Autowired
-    public FilmController(FilmService service) {
-        this.service = service;
-    }
-
     @GetMapping("/{id}")
-    public Film getFilmById(@PathVariable long id) {
+    public Film getFilmById(@PathVariable int id) {
         return service.getFilmById(id);
     }
 
@@ -48,12 +44,12 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public void addLike(@PathVariable long id, @PathVariable long userId) {
+    public void addLike(@PathVariable int id, @PathVariable int userId) {
         service.addLike(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public void removeLike(@PathVariable long id, @PathVariable long userId) {
+    public void removeLike(@PathVariable int id, @PathVariable int userId) {
         service.removeLike(id, userId);
     }
 

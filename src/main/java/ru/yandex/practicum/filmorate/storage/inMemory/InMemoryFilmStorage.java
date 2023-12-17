@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.inMemory;
 
 import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
@@ -6,24 +6,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.FilmNameAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.InvalidFilmNameException;
 import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 @Slf4j
-@Component
+
 public class InMemoryFilmStorage implements FilmStorage {
     private static final int DESCRIPTION_LENGTH = 200;
     private static final LocalDate VALIDATION_DATE = LocalDate.of(1895, 12, 28);
 
     private final Map<Long, Film> films = new HashMap<>();
-    private long generatorId = 1;
 
     @Override
-    public Film getFilmById(long filmId) {
+    public Film getFilmById(int filmId) {
         if (films.containsKey(filmId)) {
             return films.get(filmId);
         }
@@ -46,11 +45,11 @@ public class InMemoryFilmStorage implements FilmStorage {
                 + " уже существует.");
         }
 
-        film.setId(generateId());
+        //film.setId(generateId());
 
         log.info("Добавлен фильм {}", film.getName());
 
-        films.put(film.getId(), film);
+        //films.put(film.getId(), film);
         return film;
     }
 
@@ -65,9 +64,24 @@ public class InMemoryFilmStorage implements FilmStorage {
 
         log.info("Обновлён фильм {}", film.getName());
 
-        films.put(film.getId(), film);
+        //films.put(film.getId(), film);
 
         return film;
+    }
+
+    @Override
+    public void addLike(int filmId, int userId) {
+
+    }
+
+    @Override
+    public void removeLike(int filmId, int userId) {
+
+    }
+
+    @Override
+    public List<Film> getTopFilms(int count) {
+        return null;
     }
 
     private void validFilm(Film film) {
@@ -91,10 +105,5 @@ public class InMemoryFilmStorage implements FilmStorage {
             log.info("Отрицательная продолжительность фильма.");
             throw new ValidationException("Продолжительность фильма должна быть положительной.");
         }
-    }
-
-    @Override
-    public long generateId() {
-        return generatorId++;
     }
 }

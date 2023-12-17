@@ -5,7 +5,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 public interface FilmStorage {
 
-    Film getFilmById(long filmId);
+    Film getFilmById(int filmId);
 
     List<Film> getAllFilms();
 
@@ -13,5 +13,9 @@ public interface FilmStorage {
 
     Film updateFilm(Film film);
 
-    long generateId();
+    void addLike(int filmId, int userId);
+
+    void removeLike(int filmId, int userId);
+
+    List<Film> getTopFilms(int count);
 }
