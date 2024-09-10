@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.inMemory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -6,20 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.exception.UserAlreadyExistException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 @Slf4j
-@Component
+
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> users = new HashMap<>();
     private long generatorId = 1;
 
     @Override
-    public User getUserById(long id) {
+    public User getUserById(Integer id) {
         if (users.containsKey(id)) {
             return users.get(id);
         } else {
@@ -43,7 +43,7 @@ public class InMemoryUserStorage implements UserStorage {
                 + user.getId() + " уже зарегистрирован.");
         }
 
-        user.setId(generateId());
+        //user.setId(generateId());
 
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
@@ -51,7 +51,7 @@ public class InMemoryUserStorage implements UserStorage {
 
         log.info("Добавлен пользователь {}", user.getEmail());
 
-        users.put(user.getId(), user);
+        //users.put(user.getId(), user);
         return user;
     }
 
@@ -66,9 +66,29 @@ public class InMemoryUserStorage implements UserStorage {
 
         log.info("Обновлён пользователь {}", user.getEmail());
 
-        users.put(user.getId(), user);
+        //users.put(user.getId(), user);
 
         return user;
+    }
+
+    @Override
+    public void addFriend(int userId, int friendId) {
+
+    }
+
+    @Override
+    public List<User> getUserFriends(int userId) {
+        return null;
+    }
+
+    @Override
+    public void removeFriend(int userId, int friendId) {
+
+    }
+
+    @Override
+    public List<User> commonFriends(int userId, int friendId) {
+        return null;
     }
 
     private void validUser(User user) {
@@ -95,10 +115,5 @@ public class InMemoryUserStorage implements UserStorage {
             log.info("Дата рождения пользователя в будущем.");
             throw new ValidationException("Нельзя использовать дату рождения в будущем.");
         }
-    }
-
-    @Override
-    public long generateId() {
-        return generatorId++;
     }
 }

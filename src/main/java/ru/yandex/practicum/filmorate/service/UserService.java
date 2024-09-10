@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class UserService {
         this.storage = storage;
     }
 
-    public User getUserById(long id) {
+    public User getUserById(int id) {
         return storage.getUserById(id);
     }
 
@@ -34,55 +33,19 @@ public class UserService {
         return storage.updateUser(user);
     }
 
-    public void addFriend(long userId, long friendId) {
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-
-        user.getFriendsId().add(friendId);
-        friend.getFriendsId().add(userId);
-
-        updateUser(user);
-        updateUser(friend);
-
-        log.info("пользователи с id " + userId + " и " + friendId + " добавились в друзья");
+    public void addFriend(int userId, int friendId) {
+        storage.addFriend(userId, friendId);
     }
 
-    public List<User> getUserFriends(long userId) {
-        List<User> userFriends = new ArrayList<>();
-        User user = getUserById(userId);
-
-        for (Long friendId : user.getFriendsId()) {
-            userFriends.add(getUserById(friendId));
-        }
-
-        return userFriends;
+    public List<User> getUserFriends(int userId) {
+        return storage.getUserFriends(userId);
     }
 
-    public void removeFriend(long userId, long friendId) {
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-
-        user.getFriendsId().remove(friendId);
-        friend.getFriendsId().remove(userId);
-
-        updateUser(user);
-        updateUser(friend);
-
-        log.info("пользователи с id " + userId + " и " + friendId + " добавились в друзья");
+    public void removeFriend(int userId, int friendId) {
+        storage.removeFriend(userId, friendId);
     }
 
-    public List<User> commonFriends(long userId, long friendId) {
-        List<User> commonFriends = new ArrayList<>();
-
-        User user = getUserById(userId);
-        User friend = getUserById(friendId);
-
-        for (Long id : user.getFriendsId()) {
-            if (friend.getFriendsId().contains(id)) {
-                commonFriends.add(getUserById(id));
-            }
-        }
-
-        return commonFriends;
+    public List<User> commonFriends(int userId, int friendId) {
+        return storage.commonFriends(userId, friendId);
     }
 }
